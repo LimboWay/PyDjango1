@@ -2,7 +2,7 @@ import datetime
 from django.core.validators import MinLengthValidator
 from django.db import models
 from faker import Faker
-from students.validators import validate_email_domain, ValidateEmailDomain
+from core.validators import validate_email_domain
 
 VALID_DOMAINS = ('gmail.com', 'yahoo.com', 'test.com')
 
@@ -35,5 +35,4 @@ class Student(models.Model):
             s.last_name = f.last_name()
             s.email = f'{s.first_name}.{s.last_name}@{f.random.choice(VALID_DOMAINS)}'           # name.last@domain
             s.birthday = f.date_between(start_date='-65y', end_date='-18y')
-            # s.age = f.random_int(min=18, max=65)
             s.save()

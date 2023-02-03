@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}List of groups{% endblock %}
+
+{% block content %}
+    <form method="get">
+        <label for="gname">Group name:</label>
+        <input type="text" id="gname" name="group_name"><br><br>
+<!--         <label for="gstartdata">Groups start data:</label>-->
+<!--         <input type="date" id="gstartdata" name="groups_start_data"><br><br><br> -->
+        <input type="submit" value="Submit"><br>
+    </form>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Group name</th>
+                <th>Groups start data</th>
+                <th>Group description</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        <thead>
+        <tbody>
+            {% for gr in groups %}
+                <tr>
+                    <td><a href="{% url 'groups:detail' gr.pk %}">{{ gr.group_name }}</a></td>
+                    <td>{{ gr.groups_start_data }}</td>
+                    <td>{% if gr.group_description %}{{ gr.group_description }}{% endif %}</td>
+                    <td><a href="{% url 'groups:update' gr.pk %}">Edit</a></td>
+                    <td><a href="{% url 'groups:delete' gr.pk %}">Remove</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

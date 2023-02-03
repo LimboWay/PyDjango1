@@ -38,7 +38,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'students.apps.StudentsConfig',
-    'groups.apps.GroupsConfig'
+    'groups.apps.GroupsConfig',
+    'teachers.apps.TeachersConfig',
 ]
 
 MIDDLEWARE = [
