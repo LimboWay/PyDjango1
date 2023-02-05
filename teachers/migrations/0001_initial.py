@@ -14,20 +14,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name='Teacher',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('first_name', models.CharField(db_column='f_name', max_length=50, validators=[django.core.validators.MinLengthValidator(3)], verbose_name='First name')),
                 ('last_name', models.CharField(db_column='l_name', max_length=50, verbose_name='Last name')),
                 ('birthday', models.DateField(default=datetime.date.today)),
-                ('city', models.CharField(blank=True, max_length=25, null=True)),
-                ('phone', models.CharField(blank=True, max_length=100, null=True)),
+                ('salary', models.PositiveIntegerField(blank=True, null=True)),
                 ('email', models.EmailField(max_length=254)),
+                ('city', models.CharField(blank=True, max_length=25, null=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'db_table': 'students',
+                'db_table': 'teachers',
             },
         ),
     ]

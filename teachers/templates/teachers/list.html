@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}List of groups{% endblock %}
+
+{% block content %}
+    <form method="get">
+        <label for="fname">First name:</label>
+        <input type="text" id="fname" name="first_name"><br><br>
+        <label for="lname">Last name:</label>
+        <input type="text" id="lname" name="last_name"><br><br><br>
+        <input type="submit" value="Submit"><br>
+    </form>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Birthday</th>
+                <th>City</th>
+                <th>Salary</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        <thead>
+        <tbody>
+            {% for tch in teachers %}
+                <tr>
+                    <td><a href="{% url 'teachers:detail' tch.pk %}">{{ tch.first_name }}</a></td>
+                    <td>{{ tch.last_name }}</td>
+                    <td>{{ tch.birthday }}</td>
+                    <td>{% if tch.city %}{{ tch.city }}{% endif %}</td>
+                    <td>{% if tch.salary %}{{ tch.salary }}{% endif %}</td>
+                    <td><a href="{% url 'teachers:update' tch.pk %}">Edit</a></td>
+                    <td><a href="{% url 'teachers:delete' tch.pk %}">Remove</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
