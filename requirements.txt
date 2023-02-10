@@ -9,3 +9,4 @@ pep8-naming==0.13.3
 Faker==16.6.1
 python-dotenv==0.21.1
 webargs==8.2.0
+python-dateutil~=2.8.2

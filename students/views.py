@@ -1,7 +1,7 @@
 # from django.http import HttpRequest
-# from django.http import HttpResponse
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-# from django.middleware.csrf import get_token
+from django.middleware.csrf import get_token
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 # from django.views.decorators.csrf import csrf_exempt
