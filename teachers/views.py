@@ -8,7 +8,7 @@ from django.urls import reverse
 from webargs.fields import Str
 from webargs.djangoparser import use_args
 from django.db.models import Q
-from teachers.forms import CreateTeacherForm, UpdateTeacherForm
+from teachers.forms import CreateTeacherForm, UpdateTeacherForm, TeacherFilterForm
 from teachers.models import Teacher
 # from teachers.utils import format_list_teachers
 # HttpRequest
@@ -16,23 +16,18 @@ from teachers.models import Teacher
 # CRUD - Create Read Update Delete
 
 
-@use_args(
-    {
-        'first_name': Str(required=False),
-        'last_name': Str(required=False),
-    },
-    location='query',
-)
-def get_teachers(request, args):
+def get_teachers(request):
     teachers = Teacher.objects.all().order_by('birthday')
-    if len(args) and (args.get('first_name') or args.get('last_name')):
-        teachers = teachers.filter(
-            Q(first_name=args.get('first_name', '')) | Q(last_name=args.get('last_name', ''))
-        )
+    filter_form = TeacherFilterForm(data=request.GET, queryset=teachers)
+    # if len(args) and (args.get('first_name') or args.get('last_name')):
+    #     teachers = teachers.filter(
+    #         Q(first_name=args.get('first_name', '')) | Q(last_name=args.get('last_name', ''))
+    #     )
     return render(
         request=request,
         template_name='teachers/list.html',
-        context={'title': 'List of Teachers', 'teachers': teachers}
+        context={'filter_form': filter_form}
+        # context={'title': 'List of Teachers', 'teachers': teachers}
     )
 
 
