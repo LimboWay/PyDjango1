@@ -1,75 +1,53 @@
-# from django.http import HttpRequest
-# from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-# from django.middleware.csrf import get_token
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-# from django.views.decorators.csrf import csrf_exempt
-from webargs.fields import Str
-from webargs.djangoparser import use_args
-from django.db.models import Q
-from groups.forms import CreateGroupForm, UpdateGroupForm
+
+from groups.forms import GroupCreateForm, GroupUpdateFrom
 from groups.models import Group
+from students.models import Student
+
+
 # from groups.utils import format_list_groups
 # HttpRequest
 # HttpResponse
 # CRUD - Create Read Update Delete
 
-@use_args(
-    {
-        'group_name': Str(required=False),
-        'groups_start_data': Str(required=False),
-    },
-    location='query',
-)
-def get_groups(request, args):
-    groups = Group.objects.all().order_by('group_name')
-    #     if len(args) and (args.get('group_name') or args.get('groups_start_data')):
-    #         groups = groups.filter(
-    #             Q(group_name=args.get('group_name', '')) | Q(groups_start_data=args.get('groups_start_data', '')))
-    if len(args) and args.get('group_name'):
-        groups = groups.filter(group_name=args.get('group_name', ''))
-    return render(
-        request=request,
-        template_name='groups/list.html',
-        context={'title': 'List of groups', 'groups': groups}
-    )
+
+def get_groups(request):
+    groups = Group.objects.all()
+    return render(request, 'groups/list.html', {'groups': groups})
 
 
-def detail_group(request, pk):
-    # group = Group.objects.get(pk=pk)
-    group = get_object_or_404(Group, pk=pk)
-    return render(request, 'groups/detail.html', {'title': 'Detail of group', 'group': group})
-
-
-# @csrf_exempt
-def create_group_view(request):
-    if request.method == 'GET':
-        form = CreateGroupForm()
-    elif request.method == 'POST':
-        form = CreateGroupForm(request.POST)
+def create_group(request):
+    if request.method == 'POST':
+        form = GroupCreateForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('groups:list'))
-
-    return render(request, 'groups/create.html', {'form': form})
+    elif request.method == 'GET':
+        form = GroupCreateForm()
+        return render(request, 'groups/create.html', {'form': form})
 
 
 def update_group(request, pk):
-    # group = Group.objects.get(pk=pk)
     group = get_object_or_404(Group, pk=pk)
-    if request.method == 'GET':
-        form = UpdateGroupForm(instance=group)
-    elif request.method == 'POST':
-        form = UpdateGroupForm(request.POST, instance=group)
+    students = {'students': Student.objects.filter(group=group)}
+    if request.method == 'POST':
+        form = GroupUpdateFrom(data=request.POST, instance=group, initial=students)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('groups:list'))
-    return render(request, 'groups/update.html', {'form': form})
+
+    form = GroupUpdateFrom(instance=group, initial=students)
+    return render(request, 'groups/update.html', {'form': form, 'group': group})
+
+
+def detail_group(request, pk):
+    group = Group.objects.get(pk=pk)
+    return render(request, 'groups/detail.html', {'title': 'Detail of group', 'group': group})
 
 
 def delete_group(request, pk):
-    # gr = Group.objects.get(pk=pk)
     gr = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
         gr.delete()

@@ -1,5 +1,5 @@
 from django import forms
-
+from django_filters import FilterSet
 from students.models import Student
 
 
@@ -71,3 +71,12 @@ class UpdateStudentForm(forms.ModelForm):
             nums = '38' + nums
         value = f'+{nums[0]}{nums[1]} ({nums[2:5]}) {nums[5:8]}-{nums[8:10]}-{nums[10:]}'
         return value
+
+
+class StudentFilterForm(FilterSet):
+    class Meta:
+        model = Student
+        fields = {
+            'first_name': ['exact', 'icontains'],           # first_name = 'Alex',   first_name ILIKE '%abc%'
+            'last_name': ['exact', 'startswith']              # last_name LIKE 'ABC%'
+        }       # AND (OR)

@@ -1,10 +1,10 @@
 import datetime
-
 from dateutil.relativedelta import relativedelta
 from django.core.validators import MinLengthValidator
 from django.db import models
 from faker import Faker
-from core.validators import validate_email_domain
+from core.validators import ValidateEmailDomain
+from groups.models import Group
 
 VALID_DOMAINS = ('gmail.com', 'yahoo.com', 'test.com')
 
@@ -14,11 +14,11 @@ class Student(models.Model):
                                   validators=[MinLengthValidator(3)])
     last_name = models.CharField(max_length=50, verbose_name='Last name', db_column='l_name')
     # age = models.PositiveIntegerField()
-    birthday = models.DateField(default=datetime.date.today)       # default='2003-01-01'
+    birthday = models.DateField(default=datetime.date.today, blank=True)
     city = models.CharField(max_length=25, null=True, blank=True)
     phone = models.CharField(max_length=100, null=True, blank=True)
-    # email = models.EmailField(validators=[ValidateEmailDomain(*VALID_DOMAINS)])
-    email = models.EmailField()
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name='students')
+    email = models.EmailField(validators=[ValidateEmailDomain(*VALID_DOMAINS)])
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -34,10 +34,12 @@ class Student(models.Model):
     @classmethod
     def generate_fake_data(cls, cnt):
         f = Faker()
+        groups = Group.objects.all()
         for _ in range(cnt):
-            s = cls()       # s = Student()
+            s = cls()
             s.first_name = f.first_name()
             s.last_name = f.last_name()
-            s.email = f'{s.first_name}.{s.last_name}@{f.random.choice(VALID_DOMAINS)}'           # name.last@domain
+            s.email = f'{s.first_name}.{s.last_name}@{f.random.choice(VALID_DOMAINS)}'
             s.birthday = f.date_between(start_date='-65y', end_date='-18y')
+            s.group = f.random.choice(groups)
             s.save()
