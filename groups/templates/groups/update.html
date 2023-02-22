@@ -1,5 +1,3 @@
-
-
 {% extends 'base.html' %}
 
 {% load crispy_forms_filters %}
@@ -22,5 +20,10 @@ Update group "{{ group.name }}"
             </form>
         </div>
         <div class="col-3"></div>
+    </div>
+    <div class="row">
+        {% with object_list=group.students.all is_group=True %}
+            {% include 'includes/students_table.html' %}
+        {% endwith %}
     </div>
 {% endblock %}
