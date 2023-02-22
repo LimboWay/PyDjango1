@@ -37,7 +37,7 @@ class GroupCreateForm(GroupBaseForm):
 class GroupUpdateFrom(GroupBaseForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['students'].queryset = Student.objects.all()
+        self.fields['students'].queryset = Student.objects.all().select_related('group')
 
     class Meta(GroupBaseForm.Meta):
         exclude = [
