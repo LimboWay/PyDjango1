@@ -9,9 +9,13 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import os
 from os import getenv
 from pathlib import Path
+
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
+import socket
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
     'groups.apps.GroupsConfig',
     'core.apps.CoreConfig',
+    'courses.apps.CoursesConfig',
     'teachers.apps.TeachersConfig',
 ]
 
@@ -100,6 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 3
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -126,6 +134,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -142,3 +151,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 INTERNAL_IPS = [
     "127.0.0.1",
  ]
+
+EMAIL_PORT = 1025
+
+LOGIN_REDIRECT_URL = reverse_lazy('home')
