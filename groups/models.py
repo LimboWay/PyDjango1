@@ -12,9 +12,11 @@ class Group(BaseModel):
     group_description = models.CharField(max_length=150)
     start_date = models.DateField(default=datetime.date.today, validators=[validate_start_date])
     end_date = models.DateField(null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True)
     headman = models.OneToOneField(
         'students.Student', on_delete=models.SET_NULL, null=True, blank=True, related_name='headman_group'
+    )
+    course = models.OneToOneField(
+        'courses.Course', on_delete=models.SET_NULL, null=True, blank=True, related_name='course'
     )
     teachers = models.ManyToManyField(to=Teacher, blank=True, related_name='groups')
 
