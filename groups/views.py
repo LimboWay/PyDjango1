@@ -1,66 +1,75 @@
-# from django.http import HttpResponseRedirect
-# from django.shortcuts import render
-from django.urls import reverse_lazy     # reverse
-from django.views.generic import UpdateView, ListView, DeleteView, DetailView, CreateView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from groups.models import Group
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from groups.forms import CreateGroupForm, UpdateGroupForm
+from django.urls import reverse_lazy
 from students.models import Student
-from .forms import GroupUpdateForm
-from .forms import GroupCreateForm
-
-from .models import Group
 
 
-class ListGroupView(ListView):
+class GroupListView(ListView):
     model = Group
     template_name = 'groups/list.html'
+    context_object_name = "groups"
 
 
-class DetailGroupView(DetailView):
+class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
-    template_name = 'groups/detail.html'
-
-
-class CreateGroupView(CreateView):
-    model = Group
-    success_url = reverse_lazy('groups:list')
     template_name = 'groups/create.html'
-    form_class = GroupCreateForm
-
-
-class UpdateGroupView(UpdateView):
-    model = Group
-    form_class = GroupUpdateForm
-    success_url = reverse_lazy('groups:list')
-    template_name = 'groups/update.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['students'] = self.get_object().students.prefetch_related('headman_group')
-
-        return context
-
-    def get_initial(self):
-        initial = super().get_initial()
-        try:
-            initial['headman_field'] = self.object.headman.pk
-        except AttributeError:
-            initial['headman_field'] = 0
-
-        return initial
+    form_class = CreateGroupForm
+    success_url = reverse_lazy("groups:list")
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        pk = int(form.cleaned_data['headman_field'])
-        if pk:
-            form.instance.headman = Student.objects.get(pk=pk)
-        else:
-            form.instance.headman = None
-        form.save()
+        new_group = form.save()
+        students = form.cleaned_data['students']
+        for student in students:
+            student.group = new_group
+            student.save()
 
         return response
 
 
-class DeleteGroupView(DeleteView):
+class GroupDetailView(LoginRequiredMixin, DetailView):
     model = Group
+    template_name = 'groups/detail.html'
+    context_object_name = 'groups_detail'
+
+
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
+    model = Group
+    template_name = 'groups/update.html'
+    context_object_name = 'group'
+    form_class = UpdateGroupForm
     success_url = reverse_lazy('groups:list')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        try:
+            initial['headman_field'] = self.object.headman.id
+        except AttributeError:
+            pass
+        return initial
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        students = form.cleaned_data['students']
+        for student in students:
+            student.group = self.object
+            if hasattr(student, 'headman_group'):
+                group = student.headman_group
+                group.headman = None
+            student.save()
+        headman_id = int(form.cleaned_data.get('headman_field'))
+        if headman_id:
+            form.instance.headman = Student.objects.get(id=headman_id)
+        else:
+            form.instance.headman = None
+        form.save()
+        return response
+
+
+class GroupDeleteView(LoginRequiredMixin, DeleteView):
+    model = Group
     template_name = 'groups/delete.html'
+    context_object_name = 'group'
+    success_url = reverse_lazy('groups:list')

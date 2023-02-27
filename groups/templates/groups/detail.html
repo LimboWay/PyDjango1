@@ -1,23 +1,32 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+
+
 
 {% block content %}
-<div class="row">
-    <div class="col"></div>
-    <div class="col align-self-center">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{ group.name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ group.group_description }}</h6>
-                <p class="card-text">{{ group.start_date }}</p>
-                <div class="text-center">
-                    <a class="btn btn-outline-primary" href="{% url 'groups:update' group.pk %}">Edit</a>
-                    <a class="btn btn-outline-primary" href="{% url 'groups:list' %}">Back to list</a>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col align-self-center">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ groups_detail.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <strong>Start date:</strong>{{ groups_detail.start_date }}</h6>
+                    <p class="card-text">{{ groups_detail.created|date:"y M Y" }} </p>
+                    {% if teacher_detail.description %}
+                        <p class="card-text"><strong>Description:</strong><br>{{ groups_detail.group_description}}
+                        </p>{% endif %}
+                    <div class="text-center">
+                        <a class="btn btn-outline-primary" href="{% url 'groups:update' groups_detail.id %}">Edit</a>
+                        <a class="btn btn-outline-primary" href="{% url 'groups:list' %}">Back to list</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col"></div>
     </div>
-    <div class="col"></div>
-</div>
 {% endblock %}

@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% load crispy_forms_filters %}
 
 {% block title %}
-Update course "{{ course.name }}"
+Update course {{ course.group }}
 {% endblock %}
 
 {% block content %}
@@ -13,10 +13,12 @@ Update course "{{ course.name }}"
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <input class="btn btn-outline-primary" type="submit" value="Update">
-                <a class="btn btn-outline-success" href="{% url 'courses:list' %}">Cancel</a>
+                <div class="text-center">
+                    <input class="btn btn-outline-primary" type="submit" value="Update">
+                    <a class="btn btn-outline-primary" href="{% url 'courses:list' %}">Back to list</a>
+                </div>
             </form>
         </div>
         <div class="col-3"></div>
     </div>
- {% endblock %}
+{% endblock %}

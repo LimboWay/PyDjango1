@@ -3,13 +3,17 @@ from groups.models import Group
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Course', db_column='course')
-    price = models.PositiveIntegerField(default=10_000)
-    course_group = models.OneToOneField(Group, on_delete=models.SET_NULL,
-                                        null=True, blank=True, related_name='group_course')
+    CHOICES = [
+        ('I', '1 Level'),
+        ('II', '2 Level'),
+        ('III', '3 Level'),
+        ('IV', '4 Level'),
+        ('V', '5 Level'),
+        ('VI', '6 Level')
+    ]
+    course = models.CharField(max_length=30, choices=CHOICES)
+    group = models.OneToOneField(Group, on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='course_level')
 
     class Meta:
         db_table = 'courses'
-
-    def __str__(self):
-        return f'Course {self.name}'

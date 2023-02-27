@@ -1,9 +1,7 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block title %}
-Delete student "{{ student.first_name }}"
+    Delete student "{{ student.first_name }}"
 {% endblock %}
-
 {% block content %}
     <div class="row">
         <div class="col-3"></div>
@@ -11,9 +9,10 @@ Delete student "{{ student.first_name }}"
             <form method="post">
                 {% csrf_token %}
                 <div class="text-center">
-                    <p>Do you really want to remove student <strong>"{{ student.first_name }} {{ student.last_name }}"</strong></p>
-                    <input class="btn btn-outline-primary" type="submit" value="Agree">
-                    <a class="btn btn-outline-primary" href="{% url 'students:list' %}">Back to list</a>
+                    <p> Do you want to remove student <strong>{{ student.first_name }} {{ student.last_name }}</strong>
+                    </p>
+                    <input class="btn btn-outline-primary" type="submit" value="Agree"><br><br>
+                    <a class="btn btn-outline-primary" href="{% url 'students:list' %}">Back to list </a>
                 </div>
             </form>
         </div>

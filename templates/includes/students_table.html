@@ -8,30 +8,37 @@
         <th>Headman</th>
         {% if not is_group %}
             <th>Group</th>
-<!--            <th>Course name</th>-->
-            <th><i class="bi bi-pencil-fill"></i></th>
-            <th><i class="bi bi-trash3-fill"></i></th>
+            {% if user.is_authenticated %}
+                <th><i class="bi bi-pencil-fill"></i></th>
+                <th><i class="bi bi-trash3-fill"></i></th>
+            {% endif %}
         {% endif %}
     </tr>
     <thead>
     <tbody>
-    {% for st in object_list %}
+    {% for student in object_list %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'students:detail' st.pk %}">{{ st.first_name }}</a></td>
-            <td>{{ st.last_name }}</td>
-            <td class="text-center">{{ st.birthday|date:"d M Y (l)" }}</td>
+            {% if user.is_authenticated %}
+                <td class="text-center"><a href="{% url 'students:detail' student.pk %}">{{ student.first_name }}</a>
+                </td>
+            {% else %}
+                <td class="text-center">{{ student.first_name }}</td>
+            {% endif %}
+            <td class="text-center">{{ student.last_name }}</td>
+            <td class="text-center">{{ student.birthday|date:"d M Y (l)" }}</td>
             <td class="text-center">
-                {% if st.headman_group %}
+                {% if student.headman_group %}
                     <i class="bi bi-check2-circle"></i></td>
                 {% endif %}
             {% if not is_group %}
-                <td>{{ st.group.name }}</td>
-<!--                <td>{{ st.group.course.name }}</td>-->
+                <td class="text-center">{{ student.group.name }}</td>
+                  {% if user.is_authenticated %}
                 <td class="text-center"><a class="btn btn-outline-primary btn-sm"
-                                           href="{% url 'students:update' st.pk %}">Edit</a></td>
+                                           href="{% url 'students:update' student.pk %}">Edit</a></td>
                 <td class="text-center"><a class="btn btn-outline-danger btn-sm"
-                                       href="{% url 'students:delete' st.pk %}">Remove</a></td>
+                                       href="{% url 'students:delete' student.pk %}">Remove</a></td>
+                      {% endif %}
             {% endif %}
         </tr>
     {% endfor %}

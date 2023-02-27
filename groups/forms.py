@@ -1,61 +1,55 @@
 from django import forms
 from groups.models import Group
 from students.models import Student
+# from courses.models import Course
 
 
-class GroupBaseForm(forms.ModelForm):
+class BaseGroupForm(forms.ModelForm):
+    students = forms.ModelMultipleChoiceField(queryset=None, required=False)
+
+    # def save(self, commit=True):
+    #     new_group = super().save(commit)
+    #     students = self.cleaned_data['students']
+    #     for student in students:
+    #         student.group = new_group
+    #         student.save()
+
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = "__all__"
 
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'})
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
 
-class GroupCreateForm(GroupBaseForm):
-    students = forms.ModelMultipleChoiceField(queryset=Student.objects.select_related('group'), required=False)
+class CreateGroupForm(BaseGroupForm):
 
-    def save(self, commit=True):
-        group = super().save(commit)
-        students = self.cleaned_data['students']
-        for student in students:
-            student.group = group
-            student.save()
-
-    class Meta(GroupBaseForm.Meta):
-        pass
-
-
-class GroupUpdateForm(GroupBaseForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['headman_field'] = forms.ChoiceField(
-            choices=[(st.pk, f'{st.first_name} {st.last_name}') for st in self.instance.students.all()],
-            label='Headman',
-            required=False,
-        )
-        self.fields['headman_field'].choices.insert(0, (0, '--------'))
+        self.fields['students'].queryset = Student.objects.filter(group__isnull=True).select_related('group')
 
-    class Meta(GroupBaseForm.Meta):
+    class Meta(BaseGroupForm.Meta):
         exclude = [
-            'start_date',
             'headman',
         ]
 
 
-# class GroupUpdateForm(GroupBaseForm):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.fields['headman_field'] = forms.ChoiceField(
-#             choices=[(st.pk, f'{st.first_name} {st.last_name}') for st in self.instance.students.all()],
-#             label='Headman',
-#             required=False,
-#         )
-#         self.fields['headman_field'].choices.insert(0, (0, '--------'))
-#
-#     class Meta(GroupBaseForm.Meta):
-#         exclude = (
-#             'start_date',
-#         )
+class UpdateGroupForm(BaseGroupForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['students'].queryset = Student.objects.all().select_related('group')
+        self.fields['headman_field'] = forms.ChoiceField(
+            choices=[(student.id, f'{student.first_name} {student.last_name}') for student in
+                     self.instance.students.all()],
+            label='Headman',
+            required=False
+        )
+        self.fields['headman_field'].choices.insert(0, (0, '-------'))
+
+    class Meta(BaseGroupForm.Meta):
+        exclude = [
+            'start_date',
+            'headman',
+        ]

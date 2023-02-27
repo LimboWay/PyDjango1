@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 
 
-DOMAINS = ('gmail.com', 'yahoo.com')
+DOMAINS = ('gmail.com', 'yahoo.com', 'test.com')
 
 
 def validate_unique_email(email):
