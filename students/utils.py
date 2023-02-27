@@ -12,7 +12,7 @@ def format_list_students(students):
              '<th>Update</th>' \
              '</tr>' \
              '<thead>' \
-             '<tbody> '
+             '<tbody>'
     for student in students:
         string += f'<tr>' \
                   f'<td>{student.first_name}</td>' \

@@ -11,7 +11,7 @@ Delete course "{{ course.course }}"
             <form method="post">
                 {% csrf_token %}
                 <div class="text-center">
-                    <p> Do you want to remove group <strong>{{ course.lvl_course }}</strong>
+                    <p> Do you want to remove course <strong>{{ course.course }}</strong>
                     </p>
                     <input class="btn btn-outline-primary" type="submit" value="Agree"><br><br>
                     <a class="btn btn-outline-primary" href="{% url 'courses:list' %}">Back to list </a>

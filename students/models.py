@@ -14,10 +14,7 @@ class Student(PersonModel):
         db_table = 'students'
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}, email:{self.email}'
-
-    def get_age(self):
-        return relativedelta(datetime.date.today(), self.birthday).years
+        return f'{self.first_name} {self.last_name}'
 
     @classmethod
     def _generate(cls):
