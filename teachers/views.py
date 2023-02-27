@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from teachers.models import Teacher
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from teachers.form import CreateTeacherForm, UpdateTeacherForm
+from teachers.forms import CreateTeacherForm, UpdateTeacherForm
 from django.urls import reverse_lazy
 
 

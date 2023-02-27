@@ -19,7 +19,7 @@ class Group(BaseModel):
         db_table = 'groups'
 
     def __str__(self):
-        return f'Group name: {self.name}'
+        return f'{self.name}'
 
     @classmethod
     def generate_fake_data(cls):

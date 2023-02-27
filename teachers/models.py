@@ -4,7 +4,7 @@ from core.models import PersonModel
 
 
 class Teacher(PersonModel):
-    salary = models.PositiveIntegerField(default=3500)
+    salary = models.PositiveIntegerField(default=10_000)
 
     class Meta:
         db_table = 'teachers'
@@ -14,6 +14,6 @@ class Teacher(PersonModel):
 
     @classmethod
     def _generate(cls):
-        teachers = super()._generate()
-        teachers.salary = randint(10_000, 100_000)
-        teachers.save()
+        teacher = super()._generate()
+        teacher.salary = randint(10_000, 100_000)
+        teacher.save()

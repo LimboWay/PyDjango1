@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 
-import re
 
 DOMAINS = ('gmail.com', 'yahoo.com', 'test.com')
 

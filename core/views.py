@@ -12,10 +12,3 @@ def view_without_param(request):
 
 def index(request):
     return render(request, 'index.html')
-
-
-def error_404(request, exception):
-    context = {'page_title': '404'}
-    response = render(request, 'includes/404.html', context=context)
-    response.status_code = 404
-    return response
