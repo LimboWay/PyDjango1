@@ -1,16 +1,9 @@
 import datetime
 from random import choice
-
 from dateutil.relativedelta import relativedelta
-from django.core.validators import MinLengthValidator
 from django.db import models
-from faker import Faker
-
 from core.models import PersonModel
-from core.validators import ValidateEmailDomain
 from groups.models import Group
-
-VALID_DOMAINS = ('gmail.com', 'yahoo.com', 'test.com')
 
 
 class Student(PersonModel):

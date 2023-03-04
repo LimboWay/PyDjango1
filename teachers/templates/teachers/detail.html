@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
-
 {% block title %}{{ title }}{% endblock %}
-
 {% block content %}
-<div class="row">
-    <div class="col"></div>
-    <div class="col align-self-center">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{ teacher.last_name }} {{ teacher.first_name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ teacher.email }}</h6>
-                <p class="card-text">{{ teacher.birthday|date:"y M Y" }} ({{ teacher.get_age }} year(s))</p>
-                <p>Salary: {% if teacher.salary %}{{ teacher.salary }}{% endif %}$</p>
-                {% if teacher.city %}<p class="card-text">city: {{ teacher.city }}</p>{% endif %}
-                <div class="text-center">
-                    <a class="btn btn-outline-primary" href="{% url 'teachers:update' teacher.pk %}">Edit</a>
-                    <a class="btn btn-outline-primary" href="{% url 'teachers:list' %}">Back to list</a>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col align-self-center">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ teacher_detail.first_name }} {{ teacher_detail.last_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <strong>Salary:</strong>{{ teacher_detail.salary }} {{ teacher_detail.name_currency }}</h6>
+                    <p class="card-text">{{ student.birthday|date:"y M Y" }} </p>
+                    {% if teacher_detail.description %}
+                        <p class="card-text"><strong>Description:</strong><br>{{ teacher_detail.description }}
+                        </p>{% endif %}
+                    <div class="text-center">
+                        <a class="btn btn-outline-primary" href="{% url 'teachers:update' teacher_detail.id %}">Edit</a>
+                        <a class="btn btn-outline-primary" href="{% url 'teachers:list' %}">Back to list</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col"></div>
     </div>
-    <div class="col"></div>
-</div>
 {% endblock %}

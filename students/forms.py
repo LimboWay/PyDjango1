@@ -1,6 +1,8 @@
 from django import forms
 from django_filters import FilterSet
+
 from students.models import Student
+import re
 
 
 class CreateStudentForm(forms.ModelForm):
@@ -12,7 +14,6 @@ class CreateStudentForm(forms.ModelForm):
             'birthday',
             'email',
             'phone',
-            'city',
         ]
 
         widgets = {
@@ -27,7 +28,7 @@ class CreateStudentForm(forms.ModelForm):
         value = self.cleaned_data.get('last_name')
         return value.capitalize()
 
-# phone  0-9 () - +    +38 (067) 111-22-33
+    # phone  0-9 () - +    +38 (067) 111-22-33
     def clean_phone(self):
         value = self.cleaned_data.get('phone')
         nums = ''.join(i for i in value if i.isdigit())
@@ -46,8 +47,8 @@ class UpdateStudentForm(forms.ModelForm):
             'first_name',
             'last_name',
             'birthday',
-            'phone',
             'city',
+            'phone',
         ]
 
         widgets = {
@@ -62,6 +63,7 @@ class UpdateStudentForm(forms.ModelForm):
         value = self.cleaned_data.get('last_name')
         return value.capitalize()
 
+    # phone  0-9 () - +    +38 (067) 111-22-33
     def clean_phone(self):
         value = self.cleaned_data.get('phone')
         nums = ''.join(i for i in value if i.isdigit())
@@ -77,6 +79,6 @@ class StudentFilterForm(FilterSet):
     class Meta:
         model = Student
         fields = {
-            'first_name': ['exact', 'icontains'],           # first_name = 'Alex',   first_name ILIKE '%abc%'
-            'last_name': ['exact', 'startswith']              # last_name LIKE 'ABC%'
-        }       # AND (OR)
+            'first_name': ['exact', 'icontains'],  # first_name = 'Alex',   first_name ILIKE '%abc%'
+            'last_name': ['exact', 'startswith']  # last_name LIKE 'ABC%'
+        }

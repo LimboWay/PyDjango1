@@ -1,16 +1,13 @@
-from django.urls import path, re_path, reverse
-from teachers.views import get_teachers
-from teachers.views import create_teacher_view
-from teachers.views import update_teacher
-from teachers.views import detail_teacher
-from teachers.views import delete_teacher
+from django.urls import path
+from teachers import views
+
 
 app_name = 'teachers'
 
 urlpatterns = [
-    path('', get_teachers, name='list'),                       # teachers:list      group:list
-    path('create/', create_teacher_view, name='create'),       # teachers/create/
-    path('update/<int:pk>/', update_teacher, name='update'),
-    path('detail/<int:pk>/', detail_teacher, name='detail'),
-    path('delete/<int:pk>/', delete_teacher, name='delete'),
+    path('', views.TeacherListView.as_view(), name='list'),
+    path('create/', views.TeacherCreateView.as_view(), name='create'),
+    path('detail/<int:pk>/', views.TeacherDetailView.as_view(), name='detail'),
+    path('update/<int:pk>/', views.TeacherUpdateView.as_view(), name='update'),
+    path('delete/<int:pk>/', views.TeacherDeleteView.as_view(), name='delete'),
 ]

@@ -9,5 +9,10 @@ urlpatterns = [
     path('students/', include('students.urls')),
     path('teachers/', include('teachers.urls')),
     path('groups/', include('groups.urls')),
-    path('courses/', include('courses.urls')),
+    path('accounts/', include("accounts.urls")),
+    path('courses', include('courses.urls')),
+    path('accounts/', include('django.contrib.auth.urls'))
+
 ]
+#
+# handler404 = 'core.views.error_404'

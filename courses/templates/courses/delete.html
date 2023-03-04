@@ -1,15 +1,23 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
-Delete course "{{ course.name }}"
+Delete course "{{ course.course }}"
 {% endblock %}
 
-{% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <p>Do you really want to remove course <strong>"{{ course.name }}"</strong></p>
-        <input type="submit" value="Agree">
-        <br><br>
-        <a href="{% url 'courses:list' %}">Back to list</a>
-    </form>
+{{% block content %}
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col">
+            <form method="post">
+                {% csrf_token %}
+                <div class="text-center">
+                    <p> Do you want to remove course <strong>{{ course.course }}</strong>
+                    </p>
+                    <input class="btn btn-outline-primary" type="submit" value="Agree"><br><br>
+                    <a class="btn btn-outline-primary" href="{% url 'courses:list' %}">Back to list </a>
+                </div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
 {% endblock %}

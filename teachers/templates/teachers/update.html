@@ -1,9 +1,7 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% load crispy_forms_filters %}
-
 {% block title %}
-Update teacher "{{ form.first_name.value }}"
+Update teacher {{ teacher_update.first_name }}
 {% endblock %}
 
 {% block content %}
