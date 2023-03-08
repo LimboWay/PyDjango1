@@ -6,12 +6,12 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
+
 from os import getenv
 from pathlib import Path
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
-import socket
+# import socket
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -59,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'core.middleware.DurationRequestProcessMiddleware',
+    'core.middleware.MyMiddleware',
 ]
 
 ROOT_URLCONF = 'lms.urls'
@@ -73,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.get_params',
             ],
         },
     },
@@ -153,3 +156,6 @@ EMAIL_PORT = 1025
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'

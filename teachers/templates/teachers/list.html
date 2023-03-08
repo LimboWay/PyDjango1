@@ -55,13 +55,7 @@
             {% for teacher in teachers_list %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    {% if user.is_authenticated %}
-                        <td class="text-center"><a
-                                href="{% url 'teachers:detail' teacher.id %}"> {{ teacher.first_name }}</a>
-                        </td>
-                    {% else %}
-                        <td class="text-center">{{ teacher.first_name }}</td>
-                    {% endif %}
+                    <td class="text-center">{{ teacher.first_name }}</td>
                     <td class="text-center">{{ teacher.last_name }}</td>
                     {% if user.is_authenticated %}
                         <td class="text-center" id="col-edit"><a class="btn btn-outline-primary btn-sm"
@@ -75,8 +69,5 @@
             {% endfor %}
             </tbody>
         </table>
-    </div>
-    <div>
-        {% include "includes/page_numbers.html" %}
     </div>
 {% endblock %}
