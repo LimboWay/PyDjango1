@@ -13,6 +13,7 @@ class CreateStudentForm(forms.ModelForm):
             'last_name',
             'birthday',
             'email',
+            'city',
             'phone',
         ]
 
